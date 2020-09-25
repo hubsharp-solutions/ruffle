@@ -6,6 +6,7 @@ Ruffle is an opinionated wrapper for Redux-React, Redux-Toolkit and Axios that m
 Get rid of Redux and API boilerplate code.
 
 ` /store/slices/truck.js`
+```javascript
   import { createSlice } from '@reduxjs/toolkit';
   import { Ruffle } from '../ruffle-redux';
 
@@ -42,13 +43,17 @@ Get rid of Redux and API boilerplate code.
     Ruffle.registerReducer(reduxStore, sliceName, truckSlice);
     Ruffle.addWebsocketListener(reduxStore, sliceName, getTrucksAction, getTruckAction);
   });
+```
 
 ` /api/truck.js`
+
+```javascript
   import { REST } from './ruffle-api';
 
   export default () => ({
     ...REST('trucks')
   });
+```
 
 
 ## Motivation
@@ -105,23 +110,30 @@ it will call
 `createTruck()` in the `/api/truck` file.
 
 And the response will reduced in the code in your slice definition
+
+```javascript
   [createTruckAction.fulfilled]: (state, action) => {
       Ruffle.throwIfError(action);
       state.truck = action.payload.data;
       state.allTrucks.push(action.payload.data);
     },
+```
 
 
 ## Registering Your Slice
+
+```javascript
   Ruffle.registerSlice(sliceName, reduxStore => {
     Ruffle.registerReducer(reduxStore, sliceName, truckSlice);
   });
+```
 
 ## Redux setup
 
 Since your reducers are all registering themselves upon creation, your redux set up file can be simplified.
 You only need to call `Ruffle.configureSlices(reduxStore)` when your Redux is set up.
 
+```javascript
   const reducer = combineReducers({});
 
   const reduxStore = configureStore({
@@ -131,11 +143,15 @@ You only need to call `Ruffle.configureSlices(reduxStore)` when your Redux is se
   });
 
 Ruffle.configureSlices(reduxStore);
+```
 
 ## API REST Helper
+
+```javascript
   export default () => ({
     ...REST('trucks')
   });
+```
 
 
 ## Tying the Slice to API REST Calls
@@ -151,16 +167,20 @@ From the `REST` function in ruffle-api.js
 
 ## Tying it to WebSockets
 
+```javascript
   Ruffle.registerSlice(sliceName, reduxStore => {
     Ruffle.registerReducer(reduxStore, sliceName, truckSlice);
     Ruffle.addWebsocketListener(reduxStore, sliceName, getTrucksAction, getTruckAction);
   });
+```
 
 Sending a message over websockets with the data structure of:
+```javascript
   {
     type: "truck",
     id: "12345"
   }
+```
 
 And calling this function when the message is received 
   `Ruffle.fireMessageReceived(message)`
