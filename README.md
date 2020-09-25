@@ -76,35 +76,46 @@ The result is a toolkit I hope you all find helpful to get your Redux Store and 
 Since Ruffle is an opinionated solution, it makes certain assumptions about your project folder structure to automagically wire everything together.
 
 **API folder**
+
 Required: Your API files should in the folder `/api` with a file called `index.js` that exports all the individual API files.
 
 Example
 `/api/index.js`
+```javascript
 	import truck from './truck';
 		
   export default {
 		truck: truck()
-	}
+  }
+```
 
 **API file**
+
 Recommendation: Each endpoint group should be in its own file, for example `/api/truck.js`
 
 **Store folder**
+
 Recommendation: Put your Redux set-up files in a folder called `/store`
 
 **Slices folder**
+
 Recommendation: Put your individual slice files in a folder within the Store folder, for example `/store/slices`
 
 **Slice file**
+
 Recommendation: Call each individual slice file the same as the slice name.  For example, the `truck` slice should be defined within the `/store/slices/truck.js` file.
 
 ## Creating a Slice
 Ruffle makes creating a slice easy by building on the existing Redux-Toolkit's `createSlice()` function.  For slices that make API calls though, Ruffle adds functionality to integrate the Redux-Toolkit's `createAsyncThunk()`
 
-`export const createTruckAction = Ruffle.async(sliceName, 'createTruck');`
+```javascript
+  export const createTruckAction = Ruffle.async(sliceName, 'createTruck');
+```
 
 When this is called using a dispatch like this:
-`dispatch(createTruckAction(params))`
+```javascript
+  dispatch(createTruckAction(params))
+```
 
 it will call
 `createTruck()` in the `/api/truck` file.
@@ -122,6 +133,8 @@ And the response will reduced in the code in your slice definition
 
 ## Registering Your Slice
 
+To ensure your slice is registered with the Redux Store, this must be called within each slice file.
+
 ```javascript
   Ruffle.registerSlice(sliceName, reduxStore => {
     Ruffle.registerReducer(reduxStore, sliceName, truckSlice);
@@ -131,9 +144,12 @@ And the response will reduced in the code in your slice definition
 ## Redux setup
 
 Since your reducers are all registering themselves upon creation, your redux set up file can be simplified.
-You only need to call `Ruffle.configureSlices(reduxStore)` when your Redux is set up.
+You only need to call `Ruffle.configureSlices(reduxStore)` when your Redux is set up, and be sure to import the `/store/slices/index.js` file where 
+you import all your slices.
 
 ```javascript
+  import slices from './slices';
+
   const reducer = combineReducers({});
 
   const reduxStore = configureStore({
@@ -142,12 +158,18 @@ You only need to call `Ruffle.configureSlices(reduxStore)` when your Redux is se
     devTools: process.env.NODE_ENV !== 'production'
   });
 
-Ruffle.configureSlices(reduxStore);
+  Ruffle.configureSlices(reduxStore);
 ```
 
 ## API REST Helper
+If your API calls are all simple REST calls, you barely have to write any code!  Just use the `ruffle-api.js` file to turn any slice
+into a fully RESTable endpoint.
+
+In the `/api/truck.js` file
 
 ```javascript
+  import { REST } from './ruffle-api';
+
   export default () => ({
     ...REST('trucks')
   });
@@ -155,10 +177,16 @@ Ruffle.configureSlices(reduxStore);
 
 
 ## Tying the Slice to API REST Calls
-  `export const createTruckAction = Ruffle.create(sliceName);`
+
+```javascript
+  export const createTruckAction = Ruffle.create(sliceName);
+```
 
 which will automatically call
-`create()`
+
+```javascript
+  create()
+```
 
 with the path `trucks`
 
@@ -190,6 +218,7 @@ If there's an `id` field, it will call GET /trucks/:id
 If there's no `id` field, it will call GET /trucks
 
 ## What Else is Coming?
+- Better error handling.  Redux-Toolkit swallows errors in fulfilled, need a better way to extract them and throw them
 - Tighter integration with WebPack to automatically update /stores/slices/index.js when a new slice file is created
 - Tighter integration with WebPack to automatically update /api/index.js when a new api file is created
 - Better integration with Websockets, so the server can pass the object directly in the message without forcing a request to the server
