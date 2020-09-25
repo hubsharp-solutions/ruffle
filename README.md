@@ -46,11 +46,14 @@ Get rid of Redux and API boilerplate code.
 ```
 
 ` /api/truck.js`
+
+```javascript
   import { REST } from './ruffle-api';
 
   export default () => ({
     ...REST('trucks')
   });
+```
 
 
 ## Motivation
