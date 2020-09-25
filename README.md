@@ -6,6 +6,7 @@ Ruffle is an opinionated wrapper for Redux-React, Redux-Toolkit and Axios that m
 Get rid of Redux and API boilerplate code.
 
 ` /store/slices/truck.js`
+```javascript
   import { createSlice } from '@reduxjs/toolkit';
   import { Ruffle } from '../ruffle-redux';
 
@@ -42,6 +43,7 @@ Get rid of Redux and API boilerplate code.
     Ruffle.registerReducer(reduxStore, sliceName, truckSlice);
     Ruffle.addWebsocketListener(reduxStore, sliceName, getTrucksAction, getTruckAction);
   });
+```
 
 ` /api/truck.js`
   import { REST } from './ruffle-api';
