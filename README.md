@@ -82,10 +82,10 @@ Required: Your API files should in the folder `/api` with a file called `index.j
 Example
 `/api/index.js`
 ```javascript
-	import truck from './truck';
+  import truck from './truck';
 		
   export default {
-		truck: truck()
+    truck: truck()
   }
 ```
 
@@ -184,13 +184,9 @@ In the `/api/truck.js` file
 
 which will automatically call
 
-```javascript
-  create()
-```
+` POST {your api path}/trucks` 
 
-with the path `trucks`
-
-From the `REST` function in ruffle-api.js
+Using the `REST` function in ruffle-api.js
 
 
 ## Tying it to WebSockets
