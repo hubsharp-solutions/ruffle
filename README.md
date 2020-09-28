@@ -154,7 +154,7 @@ To ensure your slice is registered with the Redux Store, this must be called wit
   });
 ```
 
-Why do you need to register your slice, you might ask?  It fits with my design goal to change as few files as possible when adding a new store.  It also
+Why do you need to register your slice, you might ask?  It fits with my design goal to change as few files as possible when adding a new slice.  It also
 allows me to build future functionality into the slices as this project expands without having to make breaking changes.
 
 ## Redux setup
@@ -238,6 +238,11 @@ Which calls the endpoint
 
 With the parameters you've sent in.
 
+Note - Ruffle looks in your .env files for the {your API path} variables
+
+`process.env.REACT_APP_API_URL_AUTH`
+`process.env.REACT_APP_API_URL_PUBLIC`
+
 # Bonus
 
 ## Tying it to WebSockets
@@ -277,7 +282,7 @@ If there's no `id` field, it will call GET ALL /trucks
 
 *This is our current area of work, so we are hoping to expand this functionality soon *
 
-## What Else is Coming?
+# What Else is Coming?
 - Better error handling.  Redux-Toolkit swallows errors in fulfilled, need a better way to extract them and throw them
 - Tighter integration with WebPack to automatically update /stores/slices/index.js when a new slice file is created
 - Tighter integration with WebPack to automatically update /api/index.js when a new api file is created
